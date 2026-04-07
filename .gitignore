@@ -1,0 +1,35 @@
+# ROS2 build artifacts
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+.pytest_cache/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Runtime results (논문 기준값은 results/에 포함)
+/tmp/
+
+# Temp patched yamls
+/tmp/f1tenth_eval_patched/
+
+# Large files
+*.bag
+*.db3
+*.mcap
+
+# OS
+.DS_Store
+Thumbs.db

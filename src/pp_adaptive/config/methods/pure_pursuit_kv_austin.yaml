@@ -1,0 +1,20 @@
+pp_adaptive:
+  ros__parameters:
+    raceline_csv: '/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/Austin_map_optimal_rl_kv.csv'
+
+    odom_topic: '/ego_racecar/odom'
+    drive_topic: '/drive'
+
+    wheelbase: 0.3302
+    delta_max_deg: 24.0
+
+    lookahead_fallback: 1.0
+    search_window: 300
+    control_hz: 50.0
+    heading_filter: true
+    heading_max_error_deg: 90.0
+
+    a_lat_max: 7.5
+    use_steer_slowdown: true
+    slowdown_gain: 0.4
+    v_floor: 0.8

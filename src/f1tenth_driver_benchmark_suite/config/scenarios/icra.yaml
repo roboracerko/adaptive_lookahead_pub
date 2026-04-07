@@ -1,0 +1,16 @@
+scenario:
+  name: "icra"
+
+  sim:
+    package: "f1tenth_gym_ros"
+    config: "config/sim_icra.yaml"
+
+  map:
+    package: "pp_adaptive"
+    yaml: "maps/icra.yaml"
+    path: "maps/icra"
+
+  start_pose:
+    sx: 7.6125247
+    sy: 2.4898900
+    stheta: -0.3113788

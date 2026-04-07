@@ -1,0 +1,48 @@
+metrics_collector:
+  ros__parameters:
+    odom_topic: "/ego_racecar/odom"
+    drive_topic: "/drive"
+    lookahead_topic: ""
+    estop_topic: "/estop"
+    centerline_topic: "/track/centerline"
+
+    track_length_m: 0.0
+    track_half_width_m: 1.5
+    offtrack_margin_m: 0.10
+    centerline_file: ""
+
+    start_line_p1: [-3.2, 2.5]
+    start_line_p2: [-2.6, 2.2]
+
+    lap_detector_type: "progress"
+    min_lap_time_s: 5.0
+    progress_start_zone_s: 5.0
+    progress_wrap_margin_s: 3.0
+    progress_cooldown_s: 1.0
+    progress_min_progress_s: 0.10
+
+    min_laps: 2
+    max_laps: 2
+    auto_shutdown: true
+
+    offtrack_threshold_ratio: 0.3
+    offtrack_duration_threshold: 5.0
+    max_consecutive_offtrack: 100
+    auto_shutdown_on_error: true
+
+    track_boundary_check_enabled: true
+    track_boundary_violation_threshold: 0.5
+    max_consecutive_boundary_violations: 10
+    # Disable single-sample reverse detection (fires on odom jitter with large ld)
+    reverse_detection_enabled: false
+    reverse_dot_threshold: -0.5
+    reverse_min_movement_m: 0.02
+    reverse_min_speed_mps: 0.5
+    reverse_grace_period_s: 2.0
+    reverse_consecutive_samples: 8
+
+    output_dir: "/tmp/f1tenth_driver_benchmark_suite/results"
+
+    odom_frame: "odom"
+    map_frame: "map"
+    use_tf: false

@@ -1,0 +1,17 @@
+method,map,n,successes,success_rate_pct,wilson_lo_pct,wilson_hi_pct,avg_speed_ms,notes
+kw_sim,budapest,30,30,100.0,88.4,100.0,7.22,Proposed method
+kw_sim,spielberg,30,30,100.0,88.4,100.0,,
+kw_sim,icra,30,30,100.0,88.4,100.0,,
+kw_sim,skir,30,30,100.0,88.4,100.0,,
+kw_sim,austin,30,30,100.0,88.4,100.0,,
+kw_sim,brandshatch,30,28,93.3,78.7,98.2,,
+alg1_org,budapest,30,0,0.0,0.0,11.6,,Sukhil&Behl 2021 reproduction
+alg1_org,spielberg,30,5,16.7,7.3,34.0,,
+alg1_org,icra,30,4,13.3,5.3,30.3,,
+alg1_org,skir,30,10,33.3,19.4,51.0,,
+alg1_org,austin,30,4,13.3,5.3,30.3,,
+alg1_org,brandshatch,30,0,0.0,0.0,11.6,,
+alg1_ext,budapest,30,,,,,,"alg1_org + L={0.6,0.9,1.2,1.6,2.0}"
+kv,budapest,30,,,,,,"Ld=k*v, k=0.15"
+curv,budapest,30,,,,,,Ld∝1/sqrt(|κ|)
+notes,,,,,,,,"Wilson CI: kw_sim aggregate 99.4% [96.9-99.9]; alg1_org 33.3% [26.9-40.5]"

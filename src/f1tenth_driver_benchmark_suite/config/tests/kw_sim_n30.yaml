@@ -1,0 +1,34 @@
+evaluation:
+  name: "kw_sim_n30"
+  mode: "headless"
+
+  # 3 laps x 30 trials (pp_adaptive only)
+  laps_per_run: 3
+  trials_per_driver: 30
+  drivers: ["pp_adaptive"]
+
+  timeout_s: 300
+  cooldown_s: 5.0
+  auto_shutdown: true
+  run_tag_prefix: "kw_sim_n30"
+  use_realtime_visualizer: false
+
+  fail_fast_on_collision: true
+  fail_fast_on_offtrack: false
+  fail_fast_on_safety_halt: true
+  safety_halt_grace_s: 8.0
+
+  output_root: "/tmp/f1tenth_driver_benchmark_suite/kw_sim_n30"
+
+  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/budapest.yaml"
+  raceline_path: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl.csv"
+  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
+
+  metrics:
+    package: "f1tenth_driver_benchmark_suite"
+    executable: "metrics_collector_node"
+    visualizer_package: "f1tenth_driver_benchmark_suite"
+    visualizer_executable: "realtime_visualizer"
+
+  rl:
+    checkpoint_dir: "/home/jin/ros2_prj/rl_f1tenth/checkpoints/lookahead/vgain_curriculum_asafe_3lap/s6/best"

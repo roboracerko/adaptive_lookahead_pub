@@ -1,0 +1,16 @@
+scenario:
+  name: "budapest_map"
+
+  sim:
+    package: "f1tenth_gym_ros"
+    config: "config/sim_Budapest_map.yaml"
+
+  map:
+    package: "pp_adaptive"
+    yaml: "maps/Budapest_map.yaml"
+    path: "maps/Budapest_map"
+
+  start_pose:
+    sx: -16.8976187
+    sy: 28.1163725
+    stheta: 2.4568935

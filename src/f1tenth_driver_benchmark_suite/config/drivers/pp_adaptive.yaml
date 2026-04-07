@@ -1,0 +1,5 @@
+metrics_collector:
+  ros__parameters:
+    lookahead_topic: "/controller/lookahead"
+    track_half_width_m: 1.5
+    offtrack_margin_m: 0.10

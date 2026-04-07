@@ -1,0 +1,18 @@
+pp_core:
+  ros__parameters:
+    odom_topic: '/ego_racecar/odom'
+    drive_topic: '/drive'
+
+    wheelbase: 0.3302
+    delta_max_deg: 24.0
+
+    # Fixed lookahead distance (pp_fixed baseline)
+    lookahead_distance: 1.0
+    search_window: 300
+    control_hz: 50.0
+
+    # Speed constraints (same as kw2 for fair comparison)
+    a_lat_max: 7.5
+    use_steer_slowdown: true
+    slowdown_gain: 0.5
+    v_floor: 1.0

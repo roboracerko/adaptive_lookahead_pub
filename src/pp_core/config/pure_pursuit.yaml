@@ -1,0 +1,29 @@
+pp_core:
+  ros__parameters:
+    # 경로 설정
+    # 신규/기존 맵 모두 대응하도록 map_name + pattern 기반으로 자동 선택
+    map_name: 'Bexco'
+    raceline_pattern: '{map_name}_raceline_ld.csv'
+    raceline_packages: ['pp_core', 'pure_pursuit_driver']
+    raceline_dir: 'racelines'
+    # 명시적으로 지정하고 싶으면 아래 사용 (절대경로 or 파일명)
+    # raceline_csv: 'Spielberg_raceline_ld.csv'
+    
+    # 토픽 설정
+    odom_topic: '/ego_racecar/odom'
+    drive_topic: '/drive'
+    
+    # 차량 파라미터 (F1TENTH Gym 기본값)
+    wheelbase: 0.3302  # m (lf + lr)
+    delta_max_deg: 24.0  # deg
+    
+    # Pure Pursuit 파라미터
+    lookahead_distance: 1.0  # 고정 lookahead 거리 (m)
+    search_window: 300  # 웨이포인트 검색 윈도우 크기
+    control_hz: 50.0  # 제어 주기 (Hz)
+    
+    # 속도 제약
+    a_lat_max: 7.5  # 최대 횡가속도 (m/s²)
+    use_steer_slowdown: true  # 조향 감속 활성화
+    slowdown_gain: 0.5  # 조향 감속 게인
+    v_floor: 1.0  # 최저 속도 (m/s)

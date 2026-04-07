@@ -1,0 +1,26 @@
+evaluation:
+  name: "sensitivity_tmargin_0_5"
+  mode: "headless"
+  laps_per_run: 3
+  trials_per_driver: 10
+  drivers: ["pp_adaptive"]
+  timeout_s: 240
+  cooldown_s: 5.0
+  auto_shutdown: true
+  resume_existing: false
+  run_tag_prefix: "sensitivity_tmargin_0_5"
+  use_realtime_visualizer: false
+  fail_fast_on_collision: true
+  fail_fast_on_offtrack: true
+  fail_fast_on_safety_halt: true
+  safety_halt_grace_s: 8.0
+  output_root: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/report/sensitivity/tmargin/sensitivity_tmargin_0_5"
+  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/budapest_map.yaml"
+  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/report/sensitivity/tmargin/sensitivity_tmargin_0_5.csv"
+  metrics_common_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/revision/benchmark_common_revision.yaml"
+  pp_adaptive_config_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/revision/sensitivity/sensitivity_tmargin_0_5.yaml"
+  metrics:
+    package: "f1tenth_driver_benchmark_suite"
+    executable: "metrics_collector_node"
+    visualizer_package: "f1tenth_driver_benchmark_suite"
+    visualizer_executable: "realtime_visualizer"

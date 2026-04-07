@@ -1,0 +1,33 @@
+evaluation:
+  name: "ablation_noB_spielberg"
+  mode: "headless"
+
+  laps_per_run: 3
+  trials_per_driver: 30
+  drivers: ["pp_adaptive"]
+
+  timeout_s: 180
+  cooldown_s: 5.0
+  auto_shutdown: true
+  resume_existing: true
+  run_tag_prefix: "ablation_noB_spielberg"
+  use_realtime_visualizer: false
+
+  fail_fast_on_collision: true
+  fail_fast_on_offtrack: true
+  fail_fast_on_safety_halt: true
+  safety_halt_grace_s: 8.0
+
+  output_root: "/tmp/f1tenth_eval/ablation/ablation_noB/spielberg"
+
+  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/spielberg.yaml"
+  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/Spielberg_optimal_rl_ablation_noB.csv"
+  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
+
+  pp_adaptive_config_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/ablation/pure_pursuit_ablation_noB_spielberg.yaml"
+
+  metrics:
+    package: "f1tenth_driver_benchmark_suite"
+    executable: "metrics_collector_node"
+    visualizer_package: "f1tenth_driver_benchmark_suite"
+    visualizer_executable: "realtime_visualizer"

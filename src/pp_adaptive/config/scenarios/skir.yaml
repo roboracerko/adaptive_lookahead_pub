@@ -1,0 +1,16 @@
+scenario:
+  name: "skir"
+
+  sim:
+    package: "f1tenth_gym_ros"
+    config: "config/sim_skir.yaml"
+
+  map:
+    package: "pp_adaptive"
+    yaml: "maps/skir.yaml"
+    path: "maps/skir"
+
+  start_pose:
+    sx: 2.5163203
+    sy: 8.403559
+    stheta: 1.5877121

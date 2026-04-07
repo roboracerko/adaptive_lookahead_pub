@@ -1,0 +1,47 @@
+evaluation:
+  name: "headless_3lap_n3"
+  mode: "headless"
+
+  # m laps x n trials
+  laps_per_run: 3
+  trials_per_driver: 3
+  drivers: ["rl", "pp_fixed", "pp_adaptive"]
+
+  timeout_s: 1200
+  cooldown_s: 3.0
+  auto_shutdown: true
+  run_tag_prefix: "eval3lap"
+  use_realtime_visualizer: false
+
+  output_root: "/tmp/f1tenth_driver_benchmark_suite/results"
+
+  # Shared evaluation conditions
+  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/budapest.yaml"
+  raceline_path: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl.csv"
+  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
+
+  # Use external metrics package from sim_ws/src/f1tenth_driver_benchmark_suite
+  metrics:
+    package: "f1tenth_driver_benchmark_suite"
+    executable: "metrics_collector_node"
+    visualizer_package: "f1tenth_driver_benchmark_suite"
+    visualizer_executable: "realtime_visualizer"
+
+  rl:
+    checkpoint_dir: "/home/jin/ros2_prj/rl_f1tenth/checkpoints/lookahead/vgain_curriculum_asafe_3lap/s6/best"
+    mode: "lookahead"
+    rate_hz: 100.0
+    vgain: 1.2
+    min_speed: 0.0
+    max_speed: 99.0
+    lookahead_distance: 1.0
+    local_index_search: false
+    recovery_track_error: 0.6
+    recovery_speed_max: 1.8
+    use_common_speed_constraints: true
+    pp_adv_a_lat_max: 3.8
+    pp_adv_slowdown_gain: 1.4
+    offtrack_threshold: 1.8
+    offtrack_hold_steps: 12
+    collision_scan_threshold: 0.16
+    collision_hold_steps: 5

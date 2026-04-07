@@ -1,0 +1,16 @@
+scenario:
+  name: "budapest"
+
+  sim:
+    package: "f1tenth_gym_ros"
+    config: "config/sim_budapest.yaml"
+
+  map:
+    package: "f1tenth_driver_benchmark_suite"
+    yaml: "assets/maps/Budapest.yaml"
+    path: "assets/maps/Budapest"
+
+  start_pose:
+    sx: 16.091
+    sy: 98.27
+    stheta: 3.333

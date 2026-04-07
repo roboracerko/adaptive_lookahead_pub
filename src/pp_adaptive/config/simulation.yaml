@@ -1,0 +1,13 @@
+simulation:
+  map_name: Austin_map
+  raceline_file: Austin_map_optimal_rl_kw2_tuned_auto.csv
+  spawn_x: -1.155628
+  spawn_y: 0.27459
+  spawn_theta: 2.496532
+  max_laps: 3
+  num_agent: 1
+  rviz: true
+  lookahead_fallback: null
+  a_lat_max: null
+  slowdown_gain: null
+  v_floor: null

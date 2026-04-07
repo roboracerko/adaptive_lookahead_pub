@@ -1,0 +1,16 @@
+scenario:
+  name: "austin_map"
+
+  sim:
+    package: "f1tenth_gym_ros"
+    config: "config/sim_austin_map.yaml"
+
+  map:
+    package: "pp_adaptive"
+    yaml: "maps/Austin_map.yaml"
+    path: "maps/Austin_map"
+
+  start_pose:
+    sx: -1.1556278
+    sy: 0.2745897
+    stheta: 2.4958354

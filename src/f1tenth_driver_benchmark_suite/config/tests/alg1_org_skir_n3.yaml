@@ -1,0 +1,32 @@
+evaluation:
+  name: "alg1_org_skir_n3"
+  mode: "headless"
+
+  laps_per_run: 3
+  trials_per_driver: 3
+  drivers: ["pp_adaptive"]
+
+  timeout_s: 300
+  cooldown_s: 5.0
+  auto_shutdown: true
+  run_tag_prefix: "alg1_org_skir"
+  use_realtime_visualizer: false
+
+  fail_fast_on_collision: true
+  fail_fast_on_offtrack: true
+  fail_fast_on_safety_halt: true
+  safety_halt_grace_s: 8.0
+
+  output_root: "/tmp/f1tenth_eval/alg1_org/skir"
+
+  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/skir.yaml"
+  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/skir_optimal_rl.csv"
+  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_alg1_org.yaml"
+
+  pp_adaptive_config_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/pure_pursuit_alg1_org_skir.yaml"
+
+  metrics:
+    package: "f1tenth_driver_benchmark_suite"
+    executable: "metrics_collector_node"
+    visualizer_package: "f1tenth_driver_benchmark_suite"
+    visualizer_executable: "realtime_visualizer"

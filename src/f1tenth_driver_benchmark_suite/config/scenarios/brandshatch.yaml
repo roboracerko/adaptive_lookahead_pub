@@ -1,0 +1,16 @@
+scenario:
+  name: "brandshatch"
+
+  sim:
+    package: "f1tenth_gym_ros"
+    config: "config/sim_BrandsHatch_map.yaml"
+
+  map:
+    package: "pp_adaptive"
+    yaml: "maps/BrandsHatch_map.yaml"
+    path: "maps/BrandsHatch_map"
+
+  start_pose:
+    sx: -11.7710031
+    sy: -14.7499748
+    stheta: -1.9405307

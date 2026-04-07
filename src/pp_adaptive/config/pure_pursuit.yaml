@@ -1,0 +1,25 @@
+pp_adaptive:
+  ros__parameters:
+    # 경로 설정
+    raceline_csv: 'Budapest_optimal_rl_kw_sim.csv'  # ld_m: κ-Window+Sim hybrid (κ-window pre-filter + ALAT sim scoring, α=0.08)
+    
+    # 토픽 설정
+    odom_topic: '/ego_racecar/odom'
+    drive_topic: '/drive'
+    
+    # 차량 파라미터 (F1TENTH Gym 기본값)
+    wheelbase: 0.3302  # m (lf + lr)
+    delta_max_deg: 24.0  # deg
+    
+    # Pure Pursuit 파라미터
+    lookahead_fallback: 1.0  # ld_m 컬럼이 없을 때 사용할 고정 lookahead 거리 (m)
+    search_window: 300  # 웨이포인트 검색 윈도우 크기
+    control_hz: 50.0  # 제어 주기 (Hz)
+    heading_filter: true  # 차량 yaw와 waypoint heading 일치 후보만 우선 선택
+    heading_max_error_deg: 90.0  # heading filter 허용 오차 (deg), RL 기본값과 동일
+    
+    # 속도 제약
+    a_lat_max: 7.5  # 최대 횡가속도 (m/s²) - 급커브 구간에서 충돌 시 5.0~6.0으로 낮춤 권장
+    use_steer_slowdown: true  # 조향 감속 활성화 (강화됨: 조향각 > 15도일 때 추가 감소)
+    slowdown_gain: 0.4  # 조향 감속 게인 (0.3~0.7 권장, 값이 클수록 더 보수적) - 경로 복귀를 위해 약간 완화
+    v_floor: 0.8  # 최저 속도 (m/s) - 경로 복귀를 위해 약간 낮춤 (0.5~1.0 권장)

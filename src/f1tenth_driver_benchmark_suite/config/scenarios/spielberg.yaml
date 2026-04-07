@@ -1,0 +1,20 @@
+scenario:
+  name: "spielberg"
+
+  sim:
+    package: "f1tenth_gym_ros"
+    config: "config/sim_spielberg.yaml"
+
+  map:
+    package: "pp_adaptive"
+    yaml: "maps/Spielberg.yaml"
+    path: "maps/Spielberg"
+
+  start_pose:
+    # BUG FIX (2026-03-11): Original spawn (-30.31, -8.83) was AT the finish line
+    # → metrics_collector counted lap 1 immediately → only 2 valid laps in N=3 target
+    # New spawn is ~100m before finish line on raceline (waypoint [1198])
+    # → first finish line crossing at ~12s (well above min_lap_time_s=5s)
+    sx: -7.6286779
+    sy: 24.6898086
+    stheta: 0.0330387
