@@ -48,10 +48,23 @@ def patch(input_yaml: str, output_yaml: str, ws_root: str, results_root: str) ->
 
     # --- raceline_path ---
     rp = ev.get('raceline_path', '')
-    if rp and '/racelines/' in rp:
+    if rp:
         basename = os.path.basename(rp)
-        ev['raceline_path'] = os.path.join(pp_share, 'racelines', basename)
-    # sensitivity sweep은 그대로 (동적 생성 경로)
+        if '/racelines/' in rp and '/sensitivity/' not in rp:
+            # main/ablation raceline: racelines/ 에서 직접
+            ev['raceline_path'] = os.path.join(pp_share, 'racelines', basename)
+        elif '/sensitivity/' in rp:
+            # sensitivity sweep raceline: racelines/sensitivity/{param}/ 에서
+            # 경로 패턴: .../report/sensitivity/{param}/sensitivity_{param}_{val}.csv
+            path_parts = rp.replace('\\', '/').split('/')
+            try:
+                sens_idx = path_parts.index('sensitivity')
+                param_name = path_parts[sens_idx + 1]  # e.g. 'alat'
+                ev['raceline_path'] = os.path.join(
+                    pp_share, 'racelines', 'sensitivity', param_name, basename
+                )
+            except (ValueError, IndexError):
+                pass  # 패턴 불일치 시 원본 유지
 
     # --- pp_adaptive_config_file ---
     cf = ev.get('pp_adaptive_config_file', '')
