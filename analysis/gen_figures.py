@@ -1,4 +1,4 @@
-"""Generate all figures for IEEE RA-L paper."""
+"""Generate summary figures from benchmark outputs."""
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -18,6 +18,7 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 _WS_ROOT = os.path.dirname(_THIS_DIR)
 
 RACELINE_DIR = _known.raceline_dir or os.path.join(_WS_ROOT, 'src', 'pp_adaptive', 'racelines')
+FALLBACK_RACELINE_DIR = os.path.join(_WS_ROOT, 'src', 'pp_core', 'racelines')
 OUT_DIR = _known.output_dir or os.path.join(_WS_ROOT, 'results', 'figures')
 os.makedirs(OUT_DIR, exist_ok=True)
 
@@ -38,12 +39,20 @@ C_KIN  = '#D94E1F'   # kinSim: burnt orange
 C_KW   = '#1F77B4'   # kw: blue
 C_FIX  = '#555555'   # pp_fixed: grey
 
+
+def read_raceline(csv_name):
+    for directory in [RACELINE_DIR, FALLBACK_RACELINE_DIR]:
+        candidate = os.path.join(directory, csv_name)
+        if os.path.exists(candidate):
+            return pd.read_csv(candidate)
+    raise FileNotFoundError(csv_name)
+
 # ─────────────────────────────────────────────────────────────
 # Fig 1 — κ vs L_d scatter  (Budapest, two panels)
 # ─────────────────────────────────────────────────────────────
 def fig1_scatter():
-    kin = pd.read_csv(f'{RACELINE_DIR}/Budapest_map_optimal_rl_alg1_org.csv')
-    kw  = pd.read_csv(f'{RACELINE_DIR}/Budapest_map_optimal_rl_kw2_tuned_auto.csv')
+    kin = read_raceline('Budapest_map_optimal_rl_alg1_org.csv')
+    kw  = read_raceline('Budapest_map_optimal_rl_kw2_tuned_auto.csv')
 
     fig, axes = plt.subplots(1, 2, figsize=(7.16, 2.4), sharey=False)
     fig.subplots_adjust(wspace=0.35)

@@ -6,10 +6,11 @@ Pure Pursuit Driver with Adaptive Lookahead Launch File
 (Standalone - requires external simulator)
 """
 
+import os
+
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory, PackageNotFoundError
-import os
 
 
 def generate_launch_description():
@@ -19,8 +20,11 @@ def generate_launch_description():
     package_share = get_package_share_directory('pp_adaptive')
     config_file = os.path.join(package_share, 'config', 'pure_pursuit.yaml')
 
-    # RL과 동일 waypoint를 기본값으로 사용 (비교 평가용)
-    default_raceline = '/home/jin/ros2_prj/rl_f1tenth/waypoints/Budapest_optimal.csv'
+    default_raceline = os.path.join(
+        package_share,
+        'racelines',
+        'Budapest_map_optimal_rl_kw_sim.csv',
+    )
     try:
         rl_share = get_package_share_directory('rl_f1tenth')
         waypoint_from_install = os.path.join(rl_share, 'waypoints', 'Budapest_optimal.csv')
@@ -28,12 +32,6 @@ def generate_launch_description():
             default_raceline = waypoint_from_install
     except PackageNotFoundError:
         pass
-
-    if not os.path.exists(default_raceline):
-        default_raceline = os.path.join(
-            package_share, 'racelines', 'Budapest_raceline_vehicleaware_ld.csv'
-        )
-    
     # Pure Pursuit Driver 노드 (Adaptive Lookahead)
     pure_pursuit_node = Node(
         package='pp_adaptive',

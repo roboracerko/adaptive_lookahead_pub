@@ -23,9 +23,24 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions import Command
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
 import os
 import yaml
+
+
+def resolve_map_path(path: str) -> str:
+    if path.startswith('package://'):
+        remainder = path[len('package://'):]
+        pkg_name, _, relative = remainder.partition('/')
+        if pkg_name and relative:
+            try:
+                return os.path.join(get_package_share_directory(pkg_name), relative)
+            except PackageNotFoundError:
+                return path
+    if os.path.isabs(path) and os.path.exists(path + '.yaml'):
+        return path
+    candidate = os.path.join(get_package_share_directory('f1tenth_gym_ros'), path)
+    return candidate if os.path.exists(candidate + '.yaml') else path
 
 def generate_launch_description():
     ld = LaunchDescription()
@@ -35,6 +50,7 @@ def generate_launch_description():
         'sim.yaml'
         )
     config_dict = yaml.safe_load(open(config, 'r'))
+    map_path = resolve_map_path(config_dict['bridge']['ros__parameters']['map_path'])
     has_opp = config_dict['bridge']['ros__parameters']['num_agent'] > 1
     teleop = config_dict['bridge']['ros__parameters']['kb_teleop']
 
@@ -53,7 +69,7 @@ def generate_launch_description():
     map_server_node = Node(
         package='nav2_map_server',
         executable='map_server',
-        parameters=[{'yaml_filename': config_dict['bridge']['ros__parameters']['map_path'] + '.yaml'},
+        parameters=[{'yaml_filename': map_path + '.yaml'},
                     {'topic': 'map'},
                     {'frame_id': 'map'},
                     {'output': 'screen'},

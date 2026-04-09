@@ -1,6 +1,6 @@
 pp_adaptive:
   ros__parameters:
-    raceline_csv: '/home/jin/ros2_prj/sim_ws/src/pp_adaptive/report/sensitivity/alat/sensitivity_alat_12_0.csv'
+    raceline_csv: 'package://pp_adaptive/racelines/sensitivity/alat/sensitivity_alat_12_0.csv'
     odom_topic: '/ego_racecar/odom'
     drive_topic: '/drive'
     wheelbase: 0.3302

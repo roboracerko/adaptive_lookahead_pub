@@ -19,11 +19,11 @@ evaluation:
 
   output_root: "/tmp/f1tenth_eval/pp_fixed/austin"
 
-  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/austin_map.yaml"
-  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/Austin_map_optimal_rl.csv"
-  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
+  scenario_file: "package://f1tenth_driver_benchmark_suite/config/scenarios/austin_map.yaml"
+  raceline_path: "package://pp_adaptive/racelines/Austin_map_optimal_rl.csv"
+  metrics_common_file: "package://f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
 
-  pp_fixed_config_file: "/home/jin/ros2_prj/sim_ws/install/pp_core/share/pp_core/config/pure_pursuit_benchmark.yaml"
+  pp_fixed_config_file: "package://pp_core/config/pure_pursuit_benchmark.yaml"
 
   metrics:
     package: "f1tenth_driver_benchmark_suite"

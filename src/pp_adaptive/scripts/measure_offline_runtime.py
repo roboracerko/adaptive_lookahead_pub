@@ -7,7 +7,7 @@ kw2 labeler의 각 맵별 실행 시간과 메모리 사용량을 측정한다.
 결과는 논문 App B 및 Discussion §Practical Implications에 기재한다.
 
 사용법:
-  cd /home/jin/ros2_prj/sim_ws/src/pp_adaptive
+  cd <workspace>/src/pp_adaptive
   python3 scripts/measure_offline_runtime.py
 
 출력:

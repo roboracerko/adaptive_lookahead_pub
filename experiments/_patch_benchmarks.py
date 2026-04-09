@@ -27,6 +27,7 @@ def resolve_share(pkg_name: str) -> str:
 
 def patch(input_yaml: str, output_yaml: str, ws_root: str, results_root: str) -> None:
     pp_share = resolve_share('pp_adaptive')
+    pp_core_share = resolve_share('pp_core')
     bench_share = resolve_share('f1tenth_driver_benchmark_suite')
 
     with open(input_yaml) as f:
@@ -51,8 +52,13 @@ def patch(input_yaml: str, output_yaml: str, ws_root: str, results_root: str) ->
     if rp:
         basename = os.path.basename(rp)
         if '/racelines/' in rp and '/sensitivity/' not in rp:
-            # main/ablation raceline: racelines/ 에서 직접
-            ev['raceline_path'] = os.path.join(pp_share, 'racelines', basename)
+            # main/ablation/legacy raceline: pp_adaptive 우선, 없으면 pp_core fallback
+            adaptive_candidate = os.path.join(pp_share, 'racelines', basename)
+            core_candidate = os.path.join(pp_core_share, 'racelines', basename)
+            if os.path.exists(adaptive_candidate):
+                ev['raceline_path'] = adaptive_candidate
+            elif os.path.exists(core_candidate):
+                ev['raceline_path'] = core_candidate
         elif '/sensitivity/' in rp:
             # sensitivity sweep raceline: racelines/sensitivity/{param}/ 에서
             # 경로 패턴: .../report/sensitivity/{param}/sensitivity_{param}_{val}.csv
@@ -70,18 +76,16 @@ def patch(input_yaml: str, output_yaml: str, ws_root: str, results_root: str) ->
     cf = ev.get('pp_adaptive_config_file', '')
     if cf:
         basename = os.path.basename(cf)
-        # methods/ 에 있는 파일로 매핑
-        candidate = os.path.join(pp_share, 'config', 'methods', basename)
-        if os.path.exists(candidate):
-            ev['pp_adaptive_config_file'] = candidate
-        else:
-            # sensitivity yaml 등 config/benchmarks/sensitivity/ 에서 찾기
-            for subdir in ['sensitivity', 'ablation', '']:
-                candidate = os.path.join(pp_share, 'config', 'benchmarks', subdir, basename) if subdir else \
-                            os.path.join(pp_share, 'config', basename)
-                if os.path.exists(candidate):
-                    ev['pp_adaptive_config_file'] = candidate
-                    break
+        candidates = [
+            os.path.join(pp_share, 'config', 'methods', basename),
+            os.path.join(pp_share, 'config', 'benchmarks', 'ablation', basename),
+            os.path.join(pp_share, 'config', 'benchmarks', 'sensitivity', basename),
+            os.path.join(pp_share, 'config', basename),
+        ]
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                ev['pp_adaptive_config_file'] = candidate
+                break
 
     # --- output_root ---
     name = ev.get('name', 'unknown')

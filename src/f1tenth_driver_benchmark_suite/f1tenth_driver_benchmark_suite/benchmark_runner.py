@@ -91,7 +91,7 @@ def main():
     parser.add_argument('--raceline-path', default='')
     parser.add_argument(
         '--rl-checkpoint-dir',
-        default='/home/jin/ros2_prj/rl_f1tenth/checkpoints/lookahead/vgain_curriculum_asafe_3lap/s6/best',
+        default=os.environ.get('RL_CHECKPOINT_DIR', ''),
     )
     args = parser.parse_args()
 

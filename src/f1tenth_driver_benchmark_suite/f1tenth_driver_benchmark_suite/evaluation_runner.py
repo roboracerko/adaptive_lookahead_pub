@@ -17,6 +17,7 @@ from statistics import mean
 from typing import Any, Dict, List, Optional
 
 import yaml
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
 
 POSE_RE = re.compile(
     r'Updated ego_pose: x=([-+0-9.eE]+), y=([-+0-9.eE]+), '
@@ -28,6 +29,42 @@ def _log(*args, **kwargs) -> None:
     """Force line delivery even when stdout is piped through tee."""
     kwargs.setdefault('flush', True)
     print(*args, **kwargs)
+
+
+def _resolve_package_uri(path: str) -> str:
+    if not path or not path.startswith('package://'):
+        return path
+    remainder = path[len('package://'):]
+    pkg_name, _, relative = remainder.partition('/')
+    if not pkg_name or not relative:
+        return path
+    try:
+        return os.path.join(get_package_share_directory(pkg_name), relative)
+    except PackageNotFoundError:
+        return path
+
+
+def _resolve_packaged_file(path: str, package: str, *subdirs: str) -> str:
+    if not path:
+        return path
+    resolved = _resolve_package_uri(path)
+    if os.path.isabs(resolved) and os.path.exists(resolved):
+        return resolved
+    if os.path.isabs(resolved):
+        resolved = os.path.basename(resolved)
+    if os.path.exists(resolved):
+        return os.path.abspath(resolved)
+    try:
+        share_dir = get_package_share_directory(package)
+    except PackageNotFoundError:
+        return resolved
+    candidates = [os.path.join(share_dir, *subdirs, resolved)]
+    if os.path.basename(resolved) != resolved:
+        candidates.insert(0, os.path.join(share_dir, resolved))
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    return resolved
 
 
 def _cleanup_between_trials(verbose: bool = False) -> None:
@@ -586,26 +623,11 @@ def _resolve_defaults(config: Dict[str, Any]):
     eval_cfg.setdefault('run_tag_prefix', eval_cfg['name'])
     eval_cfg.setdefault('use_realtime_visualizer', False)
     eval_cfg.setdefault('output_root', '/tmp/f1tenth_driver_benchmark_suite/results')
-    eval_cfg.setdefault(
-        'scenario_file',
-        '/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/budapest.yaml',
-    )
-    eval_cfg.setdefault(
-        'raceline_path',
-        '/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl.csv',
-    )
-    eval_cfg.setdefault(
-        'metrics_common_file',
-        '/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_common.yaml',
-    )
-    eval_cfg.setdefault(
-        'pp_fixed_config_file',
-        '/home/jin/ros2_prj/sim_ws/src/pp_core/config/pure_pursuit.yaml',
-    )
-    eval_cfg.setdefault(
-        'pp_adaptive_config_file',
-        '/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/pure_pursuit.yaml',
-    )
+    eval_cfg.setdefault('scenario_file', 'package://f1tenth_driver_benchmark_suite/config/scenarios/budapest.yaml')
+    eval_cfg.setdefault('raceline_path', 'package://f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl.csv')
+    eval_cfg.setdefault('metrics_common_file', 'package://f1tenth_driver_benchmark_suite/config/benchmark_common.yaml')
+    eval_cfg.setdefault('pp_fixed_config_file', 'package://pp_core/config/pure_pursuit.yaml')
+    eval_cfg.setdefault('pp_adaptive_config_file', 'package://pp_adaptive/config/pure_pursuit.yaml')
 
     eval_cfg.setdefault('metrics', {})
     eval_cfg['metrics'].setdefault('package', 'f1tenth_driver_benchmark_suite')
@@ -616,18 +638,15 @@ def _resolve_defaults(config: Dict[str, Any]):
     eval_cfg.setdefault('kmpc', {})
     eval_cfg['kmpc'].setdefault(
         'raceline_path',
-        '/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl_kmpc.csv',
+        'package://f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl_kmpc.csv',
     )
     eval_cfg['kmpc'].setdefault(
         'config_file',
-        '/home/jin/ros2_prj/sim_ws/src/kmpc_driver/config/kmpc_budapest_benchmark_stable.yaml',
+        'package://kmpc_driver/config/kmpc_budapest_benchmark_stable.yaml',
     )
 
     eval_cfg.setdefault('rl', {})
-    eval_cfg['rl'].setdefault(
-        'checkpoint_dir',
-        '/home/jin/ros2_prj/rl_f1tenth/checkpoints/lookahead/vgain_curriculum_asafe_3lap/s6/best',
-    )
+    eval_cfg['rl'].setdefault('checkpoint_dir', os.environ.get('RL_CHECKPOINT_DIR', ''))
     eval_cfg['rl'].setdefault('mode', 'lookahead')
     eval_cfg['rl'].setdefault('rate_hz', 100.0)
     eval_cfg['rl'].setdefault('vgain', 1.2)
@@ -1033,7 +1052,12 @@ def main():
     parser = argparse.ArgumentParser(description='Config-based headless benchmark runner (m laps x n trials)')
     parser.add_argument(
         '--config',
-        default='/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/tests/headless_3lap_n3.yaml',
+        default=_resolve_packaged_file(
+            'headless_3lap_n3.yaml',
+            'f1tenth_driver_benchmark_suite',
+            'config',
+            'tests',
+        ),
     )
     parser.add_argument('--output-root', default='')
     args = parser.parse_args()

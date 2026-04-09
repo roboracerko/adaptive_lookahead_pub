@@ -15,7 +15,7 @@ bridge:
     scan_fov: 4.7
     scan_beams: 1080
 
-    map_path: '/home/jin/ros2_prj/sim_ws/src/f1tenth_gym_ros/maps/Austin_map'
+    map_path: 'package://f1tenth_gym_ros/maps/Austin_map'
     map_img_ext: '.png'
 
     num_agent: 1

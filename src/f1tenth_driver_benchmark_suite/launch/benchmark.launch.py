@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import csv
 import os
+import csv
 
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo, OpaqueFunction, TimerAction
 from launch.conditions import IfCondition
@@ -51,12 +51,51 @@ def _prepare_rl_raceline_numeric(src_path: str, output_dir: str) -> str:
     return dst_path
 
 
+def _resolve_path(path: str, default_package: str, *default_subdirs: str) -> str:
+    if not path:
+        return path
+    if path.startswith('package://'):
+        remainder = path[len('package://'):]
+        pkg_name, _, relative = remainder.partition('/')
+        if pkg_name and relative:
+            try:
+                return os.path.join(get_package_share_directory(pkg_name), relative)
+            except PackageNotFoundError:
+                return path
+    if os.path.isabs(path) and os.path.exists(path):
+        return path
+    if os.path.exists(path):
+        return os.path.abspath(path)
+    try:
+        share_dir = get_package_share_directory(default_package)
+    except PackageNotFoundError:
+        return path
+    candidate = os.path.join(share_dir, *default_subdirs, os.path.basename(path))
+    return candidate if os.path.exists(candidate) else path
+
+
 def _build_actions(context):
     suite_share = get_package_share_directory('f1tenth_driver_benchmark_suite')
     driver = LaunchConfiguration('driver').perform(context)
     run_tag = LaunchConfiguration('run_tag').perform(context)
     output_root = LaunchConfiguration('output_root').perform(context)
-    shared_raceline_path = LaunchConfiguration('raceline_path').perform(context)
+    shared_raceline_path = _resolve_path(
+        LaunchConfiguration('raceline_path').perform(context),
+        'f1tenth_driver_benchmark_suite',
+        'assets',
+        'racelines',
+    )
+    scenario_file = _resolve_path(
+        LaunchConfiguration('scenario_file').perform(context),
+        'f1tenth_driver_benchmark_suite',
+        'config',
+        'scenarios',
+    )
+    metrics_common_file = _resolve_path(
+        LaunchConfiguration('metrics_common_file').perform(context),
+        'f1tenth_driver_benchmark_suite',
+        'config',
+    )
 
     if driver not in ('rl', 'pp_fixed', 'pp_adaptive', 'kmpc'):
         raise RuntimeError(f"Unsupported driver='{driver}'. Use rl|pp_fixed|pp_adaptive|kmpc")
@@ -69,7 +108,7 @@ def _build_actions(context):
             os.path.join(suite_share, 'launch', 'drivers', 'sim_common.launch.py')
         ),
         launch_arguments={
-            'scenario_file': LaunchConfiguration('scenario_file'),
+            'scenario_file': scenario_file,
             'mode': LaunchConfiguration('mode'),
             'rviz_config': LaunchConfiguration('rviz_config'),
         }.items(),
@@ -86,7 +125,12 @@ def _build_actions(context):
     if driver == 'rl':
         driver_raceline_path = _prepare_rl_raceline_numeric(shared_raceline_path, output_dir)
     elif driver == 'kmpc':
-        kmpc_raceline = LaunchConfiguration('kmpc_raceline_path').perform(context)
+        kmpc_raceline = _resolve_path(
+            LaunchConfiguration('kmpc_raceline_path').perform(context),
+            'f1tenth_driver_benchmark_suite',
+            'assets',
+            'racelines',
+        )
         if kmpc_raceline:
             driver_raceline_path = kmpc_raceline
 
@@ -116,13 +160,31 @@ def _build_actions(context):
         })
 
     if driver == 'pp_fixed':
-        driver_launch_args.update({'driver_config_file': LaunchConfiguration('pp_fixed_config_file')})
+        driver_launch_args.update({
+            'driver_config_file': _resolve_path(
+                LaunchConfiguration('pp_fixed_config_file').perform(context),
+                'pp_core',
+                'config',
+            )
+        })
 
     if driver == 'pp_adaptive':
-        driver_launch_args.update({'driver_config_file': LaunchConfiguration('pp_adaptive_config_file')})
+        driver_launch_args.update({
+            'driver_config_file': _resolve_path(
+                LaunchConfiguration('pp_adaptive_config_file').perform(context),
+                'pp_adaptive',
+                'config',
+            )
+        })
 
     if driver == 'kmpc':
-        driver_launch_args.update({'driver_config_file': LaunchConfiguration('kmpc_config_file')})
+        driver_launch_args.update({
+            'driver_config_file': _resolve_path(
+                LaunchConfiguration('kmpc_config_file').perform(context),
+                'kmpc_driver',
+                'config',
+            )
+        })
 
     driver_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -131,7 +193,6 @@ def _build_actions(context):
         launch_arguments=driver_launch_args.items(),
     )
 
-    metrics_common_file = LaunchConfiguration('metrics_common_file').perform(context)
     metrics_driver_file = os.path.join(suite_share, 'config', 'drivers', f'{driver}.yaml')
 
     metrics_node = Node(
@@ -211,7 +272,7 @@ def generate_launch_description():
     default_rviz = os.path.join(suite_share, 'rviz', 'benchmark.rviz')
     default_metrics_common = os.path.join(suite_share, 'config', 'benchmark_common.yaml')
 
-    default_rl_checkpoint = '/home/jin/ros2_prj/rl_f1tenth/checkpoints/lookahead/vgain_curriculum_asafe_3lap/s6/best'
+    default_rl_checkpoint = os.environ.get('RL_CHECKPOINT_DIR', '')
 
     return LaunchDescription([
         DeclareLaunchArgument('driver', default_value='rl', description='rl|pp_fixed|pp_adaptive'),

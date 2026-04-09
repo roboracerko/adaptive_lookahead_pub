@@ -19,8 +19,8 @@ setup(
     ],
     install_requires=['setuptools', 'numpy'],
     zip_safe=True,
-    maintainer='jin',
-    maintainer_email='jin@todo.todo',
+    maintainer='anonymous',
+    maintainer_email='anonymous@example.com',
     description='Pure Pursuit driver for F1TENTH Gym ROS2',
     license='MIT',
     extras_require={

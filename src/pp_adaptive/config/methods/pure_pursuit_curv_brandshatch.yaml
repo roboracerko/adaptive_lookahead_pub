@@ -1,6 +1,6 @@
 pp_adaptive:
   ros__parameters:
-    raceline_csv: '/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/BrandsHatch_map_optimal_rl_curv.csv'
+    raceline_csv: 'package://pp_adaptive/racelines/BrandsHatch_map_optimal_rl_curv.csv'
 
     odom_topic: '/ego_racecar/odom'
     drive_topic: '/drive'

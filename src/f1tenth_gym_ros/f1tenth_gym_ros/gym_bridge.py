@@ -43,6 +43,28 @@ from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy, HistoryPo
 from waypoint_msgs.msg import Waypoint
 import os
 from transforms3d import euler
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
+
+
+def resolve_map_path(path: str) -> str:
+    if not path:
+        return path
+    if path.startswith('package://'):
+        remainder = path[len('package://'):]
+        pkg_name, _, relative = remainder.partition('/')
+        if pkg_name and relative:
+            try:
+                return os.path.join(get_package_share_directory(pkg_name), relative)
+            except PackageNotFoundError:
+                return path
+    if os.path.isabs(path) and os.path.exists(path + '.yaml'):
+        return path
+    try:
+        share_dir = get_package_share_directory('f1tenth_gym_ros')
+    except PackageNotFoundError:
+        return path
+    candidate = os.path.join(share_dir, path)
+    return candidate if os.path.exists(candidate + '.yaml') else path
 
 class GymBridge(Node):
     def __init__(self):
@@ -62,7 +84,7 @@ class GymBridge(Node):
         self.declare_parameter('scan_distance_to_base_link', 0.275)
         self.declare_parameter('scan_fov', 4.7)
         self.declare_parameter('scan_beams', 1080)
-        self.declare_parameter('map_path', '/home/jin/ros2_prj/sim_ws/src/f1tenth_gym_ros/maps/Budapest')
+        self.declare_parameter('map_path', 'package://f1tenth_gym_ros/maps/Budapest')
         self.declare_parameter('map_img_ext', '.png')
         self.declare_parameter('num_agent', 1)
         self.declare_parameter('max_laps', 2)
@@ -84,8 +106,9 @@ class GymBridge(Node):
             raise ValueError('num_agents should be an int.')
 
         # env backend
+        map_path = resolve_map_path(self.get_parameter('map_path').value)
         self.env = gym.make('f110_gym:f110-v0',
-                            map=self.get_parameter('map_path').value,
+                            map=map_path,
                             map_ext=self.get_parameter('map_img_ext').value,
                             num_agents=num_agents,
                             lidar_dist=self.get_parameter("scan_distance_to_base_link").value,

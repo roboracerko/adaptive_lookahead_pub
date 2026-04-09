@@ -20,11 +20,11 @@ evaluation:
 
   output_root: "/tmp/f1tenth_eval/ablation/ablation_noD/skir"
 
-  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/skir.yaml"
-  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/skir_optimal_rl_ablation_noD.csv"
-  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
+  scenario_file: "package://f1tenth_driver_benchmark_suite/config/scenarios/skir.yaml"
+  raceline_path: "package://pp_adaptive/racelines/skir_optimal_rl_ablation_noD.csv"
+  metrics_common_file: "package://f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
 
-  pp_adaptive_config_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/ablation/pure_pursuit_ablation_noD_skir.yaml"
+  pp_adaptive_config_file: "package://pp_adaptive/config/benchmarks/ablation/pure_pursuit_ablation_noD_skir.yaml"
 
   metrics:
     package: "f1tenth_driver_benchmark_suite"

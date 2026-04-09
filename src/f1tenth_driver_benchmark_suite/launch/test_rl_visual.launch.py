@@ -114,7 +114,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'tuned_script_path',
-            default_value='/home/jin/ros2_prj/rl_f1tenth/run_vgain1_tuned_3lapplus_220s.sh',
+            default_value=os.environ.get('RL_TUNED_SCRIPT', ''),
             description='Path to tuned RL simulation launcher script',
         ),
         DeclareLaunchArgument('domain_id', default_value='90'),
@@ -140,7 +140,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'rl_checkpoint_dir',
-            default_value='/home/jin/ros2_prj/rl_f1tenth/checkpoints/lookahead/vgain_curriculum_asafe_3lap/s6/best',
+            default_value=os.environ.get('RL_CHECKPOINT_DIR', ''),
             description='RL checkpoint directory',
         ),
         benchmark_launch,

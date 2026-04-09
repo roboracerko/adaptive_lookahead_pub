@@ -9,16 +9,17 @@ CSV 파일에서 경로와 각 waypoint별 lookahead 거리(ld_m)를 로드하�
 Odometry를 구독하여 제어 명령을 발행합니다.
 """
 
-import rclpy
-from rclpy.node import Node
-from nav_msgs.msg import Odometry
-from ackermann_msgs.msg import AckermannDriveStamped
-from std_msgs.msg import Float32
-import numpy as np
 import csv
 import math
 import os
-from ament_index_python.packages import get_package_share_directory
+
+import numpy as np
+import rclpy
+from ackermann_msgs.msg import AckermannDriveStamped
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
+from nav_msgs.msg import Odometry
+from rclpy.node import Node
+from std_msgs.msg import Float32
 
 
 def wrap_angle(angle: float) -> float:
@@ -137,6 +138,32 @@ def lateral_speed_limit(wheelbase: float, delta: float, a_lat_max: float, v_cap:
     return float(min(v_cap, math.sqrt(max(0.0, a_lat_max / kappa))))
 
 
+def resolve_path(path: str, package: str, default_subdir: str) -> str:
+    """Resolve package:// URIs and relative paths against a package share."""
+    if not path:
+        return path
+    if path.startswith('package://'):
+        remainder = path[len('package://'):]
+        pkg_name, _, relative = remainder.partition('/')
+        if not pkg_name or not relative:
+            return path
+        try:
+            return os.path.join(get_package_share_directory(pkg_name), relative)
+        except PackageNotFoundError:
+            return path
+    if os.path.isabs(path):
+        if os.path.exists(path):
+            return path
+        fallback = os.path.join(
+            get_package_share_directory(package),
+            default_subdir,
+            os.path.basename(path),
+        )
+        return fallback if os.path.exists(fallback) else path
+    candidate = os.path.join(get_package_share_directory(package), default_subdir, path)
+    return candidate if os.path.exists(candidate) else path
+
+
 class PurePursuitDriver(Node):
     """Pure Pursuit Driver Node with Adaptive Lookahead"""
     
@@ -163,26 +190,20 @@ class PurePursuitDriver(Node):
         self.declare_parameter('v_floor', 1.0)  # 최저 속도 (m/s)
         
         # 파라미터 가져오기
-        raceline_csv = self.get_parameter('raceline_csv').value
-        if not raceline_csv or not os.path.isabs(raceline_csv):
-            # 상대 경로인 경우 패키지 디렉토리 기준으로 변환
+        raceline_csv = resolve_path(
+            self.get_parameter('raceline_csv').value,
+            'pp_adaptive',
+            'racelines',
+        )
+        if not raceline_csv or not os.path.exists(raceline_csv):
             package_share = get_package_share_directory('pp_adaptive')
-            if os.path.isabs(raceline_csv):
-                # 절대 경로인 경우 그대로 사용
-                pass
+            default_csv = os.path.join(package_share, 'racelines', 'Budapest_map_optimal_rl_kw_sim.csv')
+            if os.path.exists(default_csv):
+                raceline_csv = default_csv
+                self.get_logger().warn(f'Using default raceline: {raceline_csv}')
             else:
-                # 상대 경로인 경우 racelines 디렉토리 기준
-                raceline_csv = os.path.join(package_share, 'racelines', raceline_csv)
-            
-            if not os.path.exists(raceline_csv):
-                # 기본값 시도
-                default_csv = os.path.join(package_share, 'racelines', 'Budapest_raceline_vehicleaware.csv')
-                if os.path.exists(default_csv):
-                    raceline_csv = default_csv
-                    self.get_logger().warn(f'Using default raceline: {raceline_csv}')
-                else:
-                    self.get_logger().error(f'Raceline CSV not found: {raceline_csv}')
-                    raise FileNotFoundError(f'Raceline CSV not found: {raceline_csv}')
+                self.get_logger().error(f'Raceline CSV not found: {raceline_csv}')
+                raise FileNotFoundError(f'Raceline CSV not found: {raceline_csv}')
         
         self.wheelbase = self.get_parameter('wheelbase').value
         self.delta_max = self.get_parameter('delta_max_deg').value * math.pi / 180.0

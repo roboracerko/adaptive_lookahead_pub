@@ -33,9 +33,9 @@ setup(
     ],
     install_requires=['setuptools', 'numpy', 'pyyaml', 'pillow'],
     zip_safe=True,
-    maintainer='jin',
-    maintainer_email='jin@todo.todo',
-    description='Curvature-Aware Adaptive Lookahead Pure Pursuit for F1TENTH — IEEE RA-L 2026',
+    maintainer='anonymous',
+    maintainer_email='anonymous@example.com',
+    description='Adaptive lookahead Pure Pursuit controller for F1TENTH-style simulation',
     license='MIT',
     extras_require={
         'test': ['pytest'],
@@ -43,7 +43,7 @@ setup(
     entry_points={
         'console_scripts': [
             'pp_adaptive = pp_adaptive.pure_pursuit_node:main',
-            'compute_lookahead_kw_sim = pp_adaptive.compute_adaptive_lookahead_kw2:main',
+            'compute_lookahead_kw_sim = pp_adaptive.compute_adaptive_lookahead_kw:main',
             'compute_lookahead_alg1_org = pp_adaptive.compute_adaptive_lookahead_org:main',
             'compute_lookahead_kv = pp_adaptive.compute_adaptive_lookahead_kv:main',
             'compute_lookahead_curv = pp_adaptive.compute_adaptive_lookahead_curv:main',

@@ -14,11 +14,11 @@ evaluation:
   fail_fast_on_offtrack: true
   fail_fast_on_safety_halt: true
   safety_halt_grace_s: 8.0
-  output_root: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/report/sensitivity/alat/sensitivity_alat_6_0"
-  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/budapest_map.yaml"
-  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/report/sensitivity/alat/sensitivity_alat_6_0.csv"
-  metrics_common_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/revision/benchmark_common_revision.yaml"
-  pp_adaptive_config_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/revision/sensitivity/sensitivity_alat_6_0.yaml"
+  output_root: "package://pp_adaptive/racelines/sensitivity/alat/sensitivity_alat_6_0"
+  scenario_file: "package://f1tenth_driver_benchmark_suite/config/scenarios/budapest_map.yaml"
+  raceline_path: "package://pp_adaptive/racelines/sensitivity/alat/sensitivity_alat_6_0.csv"
+  metrics_common_file: "package://pp_adaptive/config/methods/benchmark_common_revision.yaml"
+  pp_adaptive_config_file: "package://pp_adaptive/config/methods/sensitivity/sensitivity_alat_6_0.yaml"
   metrics:
     package: "f1tenth_driver_benchmark_suite"
     executable: "metrics_collector_node"

@@ -4,7 +4,7 @@
   <name>pp_core</name>
   <version>0.0.0</version>
   <description>Pure Pursuit driver for F1TENTH Gym ROS2</description>
-  <maintainer email="jin@todo.todo">jin</maintainer>
+  <maintainer email="anonymous@example.com">anonymous</maintainer>
   <license>MIT</license>
 
   <depend>rclpy</depend>

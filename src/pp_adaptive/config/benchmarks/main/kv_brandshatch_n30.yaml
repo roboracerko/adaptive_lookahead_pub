@@ -18,13 +18,13 @@ evaluation:
   fail_fast_on_safety_halt: true
   safety_halt_grace_s: 8.0
 
-  output_root: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/report/revision/kv/brandshatch"
+  output_root: "/tmp/adaptive_lookahead_review/revision/kv/brandshatch"
 
-  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/brandshatch.yaml"
-  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/BrandsHatch_map_optimal_rl_kv.csv"
-  metrics_common_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/revision/benchmark_common_revision.yaml"
+  scenario_file: "package://f1tenth_driver_benchmark_suite/config/scenarios/brandshatch.yaml"
+  raceline_path: "package://pp_adaptive/racelines/BrandsHatch_map_optimal_rl_kv.csv"
+  metrics_common_file: "package://pp_adaptive/config/methods/benchmark_common_revision.yaml"
 
-  pp_adaptive_config_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/revision/pure_pursuit_kv_brandshatch.yaml"
+  pp_adaptive_config_file: "package://pp_adaptive/config/methods/pure_pursuit_kv_brandshatch.yaml"
 
   metrics:
     package: "f1tenth_driver_benchmark_suite"

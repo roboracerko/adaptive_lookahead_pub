@@ -19,11 +19,11 @@ evaluation:
 
   output_root: "/tmp/f1tenth_eval/alg1_org/spielberg"
 
-  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/spielberg.yaml"
-  raceline_path: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/racelines/Spielberg_optimal_rl.csv"
-  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_alg1_org.yaml"
+  scenario_file: "package://f1tenth_driver_benchmark_suite/config/scenarios/spielberg.yaml"
+  raceline_path: "package://pp_adaptive/racelines/Spielberg_optimal_rl.csv"
+  metrics_common_file: "package://f1tenth_driver_benchmark_suite/config/benchmark_alg1_org.yaml"
 
-  pp_adaptive_config_file: "/home/jin/ros2_prj/sim_ws/src/pp_adaptive/config/pure_pursuit_alg1_org_spielberg.yaml"
+  pp_adaptive_config_file: "package://pp_adaptive/config/pure_pursuit_alg1_org_spielberg.yaml"
 
   metrics:
     package: "f1tenth_driver_benchmark_suite"

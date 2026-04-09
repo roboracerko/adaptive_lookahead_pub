@@ -317,8 +317,8 @@ def main():
 
     if not kw_rows:
         print('[WARN] kw_sim 결과 없음. 벤치마크를 먼저 실행하세요:')
-        print(f'  cd /home/jin/ros2_prj/benchmark_ws')
-        print(f'  source /home/jin/ros2_prj/sim_ws/install/setup.sh && source install/setup.bash')
+        print('  cd <benchmark-workspace>')
+        print('  source <underlay>/install/setup.bash && source install/setup.bash')
         print(f'  python3 -u src/f1tenth_driver_benchmark_suite/f1tenth_driver_benchmark_suite/evaluation_runner.py \\')
         print(f'    --config src/f1tenth_driver_benchmark_suite/config/tests/kw_sim_n30.yaml')
         return

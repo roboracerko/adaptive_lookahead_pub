@@ -41,7 +41,7 @@ bridge:
     scan_beams: 1080
 
     # map parameters - Bexco map
-    map_path: '/home/jin/ros2_prj/sim_ws/src/f1tenth_gym_ros/maps/Bexco'
+    map_path: 'package://f1tenth_gym_ros/maps/Bexco'
     map_img_ext: '.png'
 
     # opponent parameters

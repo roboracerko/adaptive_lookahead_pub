@@ -4,7 +4,7 @@
   <version>0.1.0</version>
   <description>Unified benchmark suite for comparing F1TENTH drivers on shared map/raceline with metrics and RViz2 support.</description>
 
-  <maintainer email="jin@example.com">jin</maintainer>
+  <maintainer email="anonymous@example.com">anonymous</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_python</buildtool_depend>

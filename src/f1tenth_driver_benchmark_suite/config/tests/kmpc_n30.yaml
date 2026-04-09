@@ -20,9 +20,9 @@ evaluation:
 
   output_root: "/tmp/f1tenth_driver_benchmark_suite/kmpc_n30"
 
-  scenario_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/scenarios/budapest.yaml"
-  raceline_path: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl.csv"
-  metrics_common_file: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
+  scenario_file: "package://f1tenth_driver_benchmark_suite/config/scenarios/budapest.yaml"
+  raceline_path: "package://f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl.csv"
+  metrics_common_file: "package://f1tenth_driver_benchmark_suite/config/benchmark_common.yaml"
 
   metrics:
     package: "f1tenth_driver_benchmark_suite"
@@ -31,5 +31,5 @@ evaluation:
     visualizer_executable: "realtime_visualizer"
 
   kmpc:
-    raceline_path: "/home/jin/ros2_prj/benchmark_ws/src/f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl_kmpc.csv"
-    config_file: "/home/jin/ros2_prj/sim_ws/src/kmpc_driver/config/kmpc_budapest_benchmark_stable.yaml"
+    raceline_path: "package://f1tenth_driver_benchmark_suite/assets/racelines/Budapest_optimal_rl_kmpc.csv"
+    config_file: "package://kmpc_driver/config/kmpc_budapest_benchmark_stable.yaml"

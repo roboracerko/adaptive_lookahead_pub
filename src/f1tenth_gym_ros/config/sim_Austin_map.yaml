@@ -24,7 +24,7 @@ bridge:
     scan_beams: 1080
 
     # map parameters
-    map_path: '/home/jin/ros2_prj/sim_ws/src/pp_adaptive/maps/Austin_map'
+    map_path: 'package://pp_adaptive/maps/Austin_map'
     map_img_ext: '.png'
 
     # opponent parameters

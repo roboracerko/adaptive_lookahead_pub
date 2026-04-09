@@ -21,11 +21,13 @@ BENCH_CONFIG_DIR="$WS_ROOT/src/pp_adaptive/config/benchmarks/sensitivity"
 TMP_DIR="/tmp/f1tenth_eval_patched"
 RESULTS_ROOT="/tmp/f1tenth_eval/sensitivity"
 PARAM_FILTER=""
+DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --param) PARAM_FILTER="$2"; shift 2 ;;
         --results-root) RESULTS_ROOT="$2"; shift 2 ;;
+        --dry-run) DRY_RUN=1; shift ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
 done
@@ -37,6 +39,7 @@ echo "============================================================"
 echo " F1TENTH Adaptive Lookahead — Sensitivity Sweep (Budapest)"
 echo " Param   : ${PARAM_FILTER:-all}"
 echo " Results : $RESULTS_ROOT"
+echo " DryRun  : $DRY_RUN"
 echo "============================================================"
 
 for YAML in "$BENCH_CONFIG_DIR"/bench_sensitivity_*.yaml; do
@@ -56,7 +59,11 @@ for YAML in "$BENCH_CONFIG_DIR"/bench_sensitivity_*.yaml; do
         --output "$PATCHED"
 
     echo ">>> $YAML_NAME"
-    python3 "$EVAL_RUNNER" --config "$PATCHED"
+    if [[ "$DRY_RUN" == "1" ]]; then
+        echo "[DRY] python3 $EVAL_RUNNER --config $PATCHED"
+    else
+        python3 "$EVAL_RUNNER" --config "$PATCHED"
+    fi
 done
 
 echo "Done. Results: $RESULTS_ROOT"

@@ -8,7 +8,7 @@
 # R7:  alg1_ext — alg1_org + 확장 candidates {0.6, 0.9, 1.2, 1.6, 2.0}
 #
 # 사용법:
-#   cd /home/jin/ros2_prj/sim_ws/src/pp_adaptive
+#   cd <workspace>/src/pp_adaptive
 #   bash scripts/generate_revision_racelines.sh
 #
 # 출력:
