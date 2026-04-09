@@ -10,6 +10,11 @@ It is organized for review-time reproducibility: build the workspace, run the be
 - main benchmark, ablation, and sensitivity sweeps
 - analysis scripts for summary statistics and figure regeneration
 
+## Prerequisites
+
+- ROS 2 Humble is required for building and running this workspace.
+- The examples below assume `/opt/ros/humble/setup.bash` is available.
+
 ## Quick Start
 
 ### 1. Build the workspace
